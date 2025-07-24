@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Windows Machine": {
+      "commandName": "Project",
+      "nativeDebugging": false,
+      "environmentVariables": {
+        "SUPABASE_URL": "https://asczbyxadxprsxszicqu.supabase.co",
+        "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzY3pieXhhZHhwcnN4c3ppY3F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2ODcwNDYsImV4cCI6MjA1ODI2MzA0Nn0.-DgiaxUO4DQoZF4cblmJvPVT8iEvbnClW9U7Npu4ao4"
+      }
+    }
+  }
+}

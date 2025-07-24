@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiMySql.Views.EliminarView"
+             Title="EliminarView">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Eliminar Producto" FontSize="20" HorizontalOptions="Center" />
+
+            <Entry x:Name="EntryBuscarId" Placeholder="Ingrese ID del producto" Keyboard="Numeric" />
+
+            <Button Text="Buscar"
+                    Clicked="OnBuscarProductoClicked"
+                    BackgroundColor="Purple"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+
+            <Label Text="Nombre" />
+            <Entry x:Name="EntryNombre" IsReadOnly="True" />
+
+            <Label Text="Descripción" />
+            <Entry x:Name="EntryDescripcion" IsReadOnly="True" />
+
+            <Label Text="Stock" />
+            <Entry x:Name="EntryStock" IsReadOnly="True" />
+
+            <Label Text="Precio" />
+            <Entry x:Name="EntryPrecio" IsReadOnly="True" />
+
+            <Button Text="Eliminar Producto"
+                    Clicked="OnEliminarProductoClicked"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

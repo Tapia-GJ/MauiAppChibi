@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiMySql.Views.CarritoView"
+             Title="Mi Carrito"
+             BackgroundColor="#1e2939">
+
+    <VerticalStackLayout Padding="10">
+        <Label Text="Carrito de Compras"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <CollectionView x:Name="CarritoCollectionView"
+                        ItemsSource="{Binding ProductosEnCarrito}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="0,5" BackgroundColor="White" CornerRadius="10">
+                        <Grid ColumnDefinitions="100,*,Auto"
+                              RowDefinitions="Auto,Auto">
+                            <Image Source="{Binding Imagen}" Grid.RowSpan="2"
+                                   HeightRequest="80" WidthRequest="80"
+                                   Aspect="AspectFill" Margin="5"/>
+
+                            <Label Grid.Column="1" Text="{Binding Nombre}" FontAttributes="Bold" FontSize="16"/>
+                            <Label Grid.Column="2" Text="{Binding PrecioTotal, StringFormat='${0:F2}'}"
+                                   FontSize="16" TextColor="#008000" HorizontalTextAlignment="End"/>
+
+                            <StackLayout Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                                <Button Text="−" WidthRequest="30" Clicked="RestarCantidad_Clicked"/>
+                                <Label Text="{Binding Cantidad}" VerticalOptions="Center"/>
+                                <Button Text="+" WidthRequest="30" Clicked="SumarCantidad_Clicked"/>
+                            </StackLayout>
+
+                            <Button Grid.Row="1" Grid.Column="2" Text="Eliminar" BackgroundColor="#ff5252"
+                                    TextColor="White" Clicked="Eliminar_Clicked" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Text="{Binding Total, StringFormat='Total: ${0:F2}'}"
+               FontSize="20"
+               FontAttributes="Bold"
+               HorizontalOptions="End"
+               Margin="10"/>
+
+        <Button Text="Pagar ahora"
+                BackgroundColor="#ffd600"
+                TextColor="Black"
+                CornerRadius="8"
+                HeightRequest="50"
+                Clicked="Pagar_Clicked" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiMySql.Views.ModificarView"
+             Title="Modificar Producto">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Buscar Producto por ID" FontSize="20" HorizontalOptions="Center" />
+
+            <Entry x:Name="EntryBuscarId" Placeholder="Ingrese ID del producto" Keyboard="Numeric" />
+
+            <Button Text="Buscar"
+                    Clicked="OnBuscarProductoClicked"
+                    BackgroundColor="Purple"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+
+            <Label Text="Nombre" />
+            <Entry x:Name="EntryNombre" Placeholder="Nombre del producto" />
+
+            <Label Text="Descripción" />
+            <Entry x:Name="EntryDescripcion" Placeholder="Descripción" />
+
+            <Label Text="Stock" />
+            <Entry x:Name="EntryStock" Placeholder="Stock" Keyboard="Numeric" />
+
+            <Label Text="Precio" />
+            <Entry x:Name="EntryPrecio" Placeholder="Precio" Keyboard="Numeric" />
+
+            <Button Text="Actualizar Producto"
+                    Clicked="OnActualizarProductoClicked"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

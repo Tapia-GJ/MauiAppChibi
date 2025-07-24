@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiMySql.Views.BuscarView"
+             Title="BuscarView">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Buscar Producto" FontSize="20" HorizontalOptions="Center" />
+
+            <Entry x:Name="EntryBuscar" Placeholder="Ingrese texto a buscar..." />
+
+            <Button Text="Buscar"
+                    Clicked="OnBuscarClicked"
+                    BackgroundColor="Purple"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+
+            <CollectionView x:Name="ResultadosCollectionView">
+                <CollectionView.Header>
+                    <Grid Padding="5" BackgroundColor="LightGray">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Id" Grid.Column="0" FontAttributes="Bold"/>
+                        <Label Text="Nombre" Grid.Column="1" FontAttributes="Bold"/>
+                        <Label Text="Descripción" Grid.Column="2" FontAttributes="Bold"/>
+                        <Label Text="Stock" Grid.Column="3" FontAttributes="Bold"/>
+                        <Label Text="Precio" Grid.Column="4" FontAttributes="Bold"/>
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="{Binding Id}" Grid.Column="0"/>
+                            <Label Text="{Binding Nombre}" Grid.Column="1"/>
+                            <Label Text="{Binding Descripcion}" Grid.Column="2"/>
+                            <Label Text="{Binding Stock}" Grid.Column="3"/>
+                            <Label Text="{Binding Precio}" Grid.Column="4"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

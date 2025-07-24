@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiMySql.Views.LoginView"
+             Title="Acceso"
+             BackgroundColor="White">
+
+    <VerticalStackLayout Padding="30" Spacing="20">
+
+        <Label Text="Bienvenido a Chibiquiles"
+               FontSize="28"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <Entry x:Name="EmailEntry"
+               Placeholder="Correo electrónico"
+               TextColor="Black"
+               Keyboard="Email"
+               ClearButtonVisibility="WhileEditing" />
+
+        <Entry x:Name="PasswordEntry"
+               TextColor="Black"
+               Placeholder="Contraseña"
+               IsPassword="True"
+               ClearButtonVisibility="WhileEditing" />
+
+        <Button Text="Iniciar sesión"
+                Clicked="IniciarSesion_Clicked"
+                BackgroundColor="#2e7d32"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="50" />
+
+        <Button Text="Registrarse"
+                Clicked="Registrarse_Clicked"
+                BackgroundColor="#1565c0"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="50" />
+
+        <Label x:Name="MensajeError"
+               TextColor="Red"
+               FontAttributes="Italic"
+               IsVisible="False"
+               HorizontalTextAlignment="Center" />
+    </VerticalStackLayout>
+</ContentPage>
