@@ -34,9 +34,21 @@
                                    FontAttributes="Bold" FontSize="17"
                                    VerticalOptions="Center" />
 
-                            <Label Grid.Column="2" Text="{Binding PrecioTotal, StringFormat='${0:F2}'}"
-                                   FontSize="18" TextColor="#28A745" HorizontalTextAlignment="End"
-                                   FontAttributes="Bold" VerticalOptions="Center" />
+                            <!-- Contenedor para los precios -->
+                            <StackLayout Grid.Column="2" Orientation="Vertical" Spacing="2"
+                                         HorizontalOptions="End" VerticalOptions="Center">
+
+                                <!-- Precio unitario (solo se muestra si cantidad > 1) -->
+                                <Label Text="{Binding Producto.Precio, StringFormat='${0:F2}'}"
+                                       FontSize="14" TextColor="#6C757D" HorizontalTextAlignment="End"
+                                       IsVisible="{Binding MostrarPrecioUnitario}" />
+                                
+
+                                <!-- Precio total -->
+                                <Label Text="{Binding PrecioTotal, StringFormat='${0:F2}'}"
+                                       FontSize="18" TextColor="#28A745" HorizontalTextAlignment="End"
+                                       FontAttributes="Bold" />
+                            </StackLayout>
 
                             <StackLayout Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="8"
                                          VerticalOptions="Center">
@@ -73,6 +85,7 @@
                 HeightRequest="55"
                 FontSize="18"
                 Clicked="Pagar_Clicked" />
+        
 
     </VerticalStackLayout>
 </ContentPage>

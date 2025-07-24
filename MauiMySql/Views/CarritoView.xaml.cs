@@ -1,17 +1,19 @@
 using MauiMySql.Clases;
 using MauiMySql.Models;
-using System.Collections.ObjectModel;
-using System.Text;
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-
 namespace MauiMySql.Views;
 
-public partial class CarritoView : ContentPage
+public partial class CarritoView : ContentPage, INotifyPropertyChanged
 {
     public ObservableCollection<ProductoCarrito> productos { get; set; } = new();
     private readonly Consultas consultas = new();
@@ -91,6 +93,10 @@ public partial class CarritoView : ContentPage
             }
 
             OnPropertyChanged(nameof(Total));
+
+            // Forzar actualización del CollectionView para que se reevalúen los bindings
+            CarritoCollectionView.ItemsSource = null;
+            CarritoCollectionView.ItemsSource = productos;
         }
     }
 
@@ -109,6 +115,10 @@ public partial class CarritoView : ContentPage
             }
 
             OnPropertyChanged(nameof(Total));
+
+            // Forzar actualización del CollectionView para que se reevalúen los bindings
+            CarritoCollectionView.ItemsSource = null;
+            CarritoCollectionView.ItemsSource = productos;
         }
     }
 
@@ -147,9 +157,35 @@ public partial class CarritoView : ContentPage
         }
     }
 
-
-
     public decimal Total => productos.Sum(p => (decimal)p.PrecioTotal);
 
-    //public double Total => productos.Sum(p => p.PrecioTotal);
+    // Método helper para verificar si mostrar precio unitario
+    public bool MostrarPrecioUnitario(ProductoCarrito producto)
+    {
+        return producto.Cantidad > 1;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public class CantidadToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int cantidad)
+            {
+                return cantidad > 1;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
