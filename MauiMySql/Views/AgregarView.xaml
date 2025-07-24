@@ -2,95 +2,214 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiMySql.Views.AgregarView"
-             BackgroundColor="#1e2939"
+             BackgroundColor="#f8fafc"
              Title="Agregar">
-
     <ScrollView>
-        <VerticalStackLayout Padding="10">
+        <VerticalStackLayout Padding="25">
+            <!-- Header ultra moderno con glassmorphism -->
+            <Frame BackgroundColor="White" 
+                   CornerRadius="25" 
+                   HasShadow="True"
+                   Padding="20"
+                   Margin="0,10,15,30">
+                <Frame.Shadow>
+                    <Shadow Brush="#e2e8f0" Offset="0,8" Radius="20" Opacity="0.3"/>
+                </Frame.Shadow>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-            <!-- Encabezado -->
-            <Grid  Padding="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                    <!-- Barra de búsqueda premium -->
+                    <Frame BackgroundColor="#f1f5f9" 
+                           CornerRadius="20" 
+                           HasShadow="False" 
+                           Padding="0"
+                           BorderColor="#e2e8f0">
+                        <Entry x:Name="EntryBuscar"
+                               Placeholder="🔍 Descubre productos increíbles..."
+                               BackgroundColor="Transparent"
+                               TextColor="#1e293b"
+                               PlaceholderColor="#64748b"
+                               HeightRequest="55"
+                               FontSize="16"
+                               Margin="25,0"
+                               VerticalOptions="Center"
+                               HorizontalOptions="FillAndExpand" />
+                    </Frame>
 
-                <Entry x:Name="EntryBuscar"
-                       Placeholder="Buscar en Chibiquiles"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="40"
-                       VerticalOptions="Center"
-                       HorizontalOptions="FillAndExpand" />
+                    <!-- Botón carrito con gradiente -->
+                    <Frame CornerRadius="20" 
+                           HasShadow="True"
+                           Padding="15"
+                           Grid.Column="1"
+                           Margin="20,0,0,0"
+                           VerticalOptions="Center">
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#6366f1" Offset="0"/>
+                                <GradientStop Color="#8b5cf6" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Frame.Background>
+                        <Frame.Shadow>
+                            <Shadow Brush="#6366f1" Offset="0,4" Radius="15" Opacity="0.4"/>
+                        </Frame.Shadow>
+                        <Image Source="cart_icon.png"
+                               WidthRequest="28"
+                               HeightRequest="28"
+                               VerticalOptions="Center"/>
+                    </Frame>
+                </Grid>
+            </Frame>
 
-                <Image Source="cart_icon.png"
-                       WidthRequest="24"
-                       HeightRequest="24"
-                       Margin="10,0,0,0"
-                       Grid.Column="1"
-                       VerticalOptions="Center"/>
-            </Grid>
+            <!-- Título con estilo magazine -->
+            <Frame BackgroundColor="White" 
+                   CornerRadius="20" 
+                   HasShadow="True"
+                   Padding="25,20"
+                   Margin="0,0,0,30">
+                <Frame.Shadow>
+                    <Shadow Brush="#e2e8f0" Offset="0,4" Radius="15" Opacity="0.2"/>
+                </Frame.Shadow>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="✨"
+                           FontSize="24"
+                           VerticalOptions="Center"
+                           Margin="0,0,10,0"/>
+                    <Label Text="Inspirado en lo último que viste"
+                           FontAttributes="Bold"
+                           FontSize="22"
+                           TextColor="#1e293b"
+                           VerticalOptions="Center"/>
+                    <Label Text="✨"
+                           FontSize="24"
+                           VerticalOptions="Center"
+                           Margin="10,0,0,0"/>
+                </StackLayout>
+            </Frame>
 
-            <!-- Título -->
-            <Label Text="Inspirado en lo último que viste"
-                   FontAttributes="Bold"
-                   FontSize="18"
-                   Margin="10,10,10,0"/>
-
-            <!-- CollectionView -->
+            <!-- CollectionView con diseño premium tipo Pinterest -->
             <CollectionView x:Name="ProductosCollectionView"
-                            Margin="0,0,0,20">
+                            Margin="0,0,0,25">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame HasShadow="True" CornerRadius="10" Margin="0,10">
+                        <Frame BackgroundColor="White" 
+                               HasShadow="True" 
+                               CornerRadius="25" 
+                               Margin="0,15"
+                               Padding="0">
+                            <Frame.Shadow>
+                                <Shadow Brush="#cbd5e1" Offset="0,8" Radius="25" Opacity="0.15"/>
+                            </Frame.Shadow>
                             <VerticalStackLayout>
-                                <Grid ColumnDefinitions="100,*,Auto">
-                                    <Image Grid.Column="0"
-                   Source="{Binding ImagenPath}"
-                   Aspect="AspectFill"
-                   HeightRequest="100"
-                   WidthRequest="100"/>
+                                <Grid ColumnDefinitions="130,*" 
+                                      Padding="25">
 
-                                    <VerticalStackLayout Grid.Column="1" Padding="10,0,10,0">
+                                    <!-- Imagen con efecto hover -->
+                                    <Frame Grid.Column="0"
+                                           CornerRadius="20"
+                                           HasShadow="True"
+                                           Padding="0"
+                                           BorderColor="#f1f5f9">
+                                        <Frame.Shadow>
+                                            <Shadow Brush="#64748b" Offset="0,4" Radius="12" Opacity="0.1"/>
+                                        </Frame.Shadow>
+                                        <Image Source="{Binding ImagenPath}"
+                                               Aspect="AspectFill"
+                                               HeightRequest="110"
+                                               WidthRequest="110"/>
+                                    </Frame>
 
+                                    <!-- Info del producto con tipografía elegante -->
+                                    <VerticalStackLayout Grid.Column="1" 
+                                                         Padding="25,5,10,5"
+                                                         VerticalOptions="Center">
                                         <Label Text="{Binding Nombre}"
-                       FontAttributes="Bold"
-                       FontSize="14"
-                       LineBreakMode="TailTruncation" />
+                                               FontAttributes="Bold"
+                                               FontSize="18"
+                                               TextColor="#0f172a"
+                                               LineBreakMode="TailTruncation" />
 
                                         <Label Text="{Binding Descripcion}"
-                       FontSize="12"
-                       TextColor="Gray"
-                       LineBreakMode="TailTruncation"
-                       MaxLines="2"/>
+                                               FontSize="14"
+                                               TextColor="#64748b"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2"
+                                               Margin="0,8,0,12"/>
 
-                                        <Label Text="{Binding Precio, StringFormat='$ {0:N2}'}"
-                       FontAttributes="Bold"
-                       FontSize="16"
-                       TextColor="Black"/>
+                                        <Frame CornerRadius="12" 
+                                               HasShadow="False"
+                                               Padding="12,6"
+                                               HorizontalOptions="Start"
+                                               Margin="0,0,0,8">
+                                            <Frame.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                    <GradientStop Color="#06b6d4" Offset="0"/>
+                                                    <GradientStop Color="#0891b2" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Frame.Background>
+                                            <Label Text="{Binding Precio, StringFormat='$ {0:N2}'}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="20"
+                                                   TextColor="White"/>
+                                        </Frame>
 
-                                        <Label Text="Envío gratis ⚡ FULL"
-                       FontSize="12"
-                       TextColor="Green"
-                       FontAttributes="Bold"/>
+                                        <Frame BackgroundColor="#dcfce7" 
+                                               CornerRadius="15" 
+                                               HasShadow="False"
+                                               Padding="12,6"
+                                               HorizontalOptions="Start"
+                                               BorderColor="#bbf7d0">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="⚡"
+                                                       FontSize="14"
+                                                       VerticalOptions="Center"/>
+                                                <Label Text="Envío GRATIS"
+                                                       FontSize="13"
+                                                       TextColor="#15803d"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center"
+                                                       Margin="5,0,0,0"/>
+                                            </StackLayout>
+                                        </Frame>
                                     </VerticalStackLayout>
                                 </Grid>
 
-                                <!-- ✅ Botón para agregar al carrito -->
-                                <Button Text="Agregar al carrito"
-                BackgroundColor="#FFCC00"
-                TextColor="Black"
-                CornerRadius="8"
-                Margin="10,5"
-                Clicked="AgregarAlCarrito_Clicked" />
+                                <!-- Botón ultra premium con animación visual -->
+                                <Frame CornerRadius="20" 
+                                       HasShadow="True"
+                                       Margin="25,10,25,25"
+                                       Padding="0">
+                                    <Frame.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#f59e0b" Offset="0"/>
+                                            <GradientStop Color="#f97316" Offset="0.5"/>
+                                            <GradientStop Color="#ea580c" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Frame.Background>
+                                    <Frame.Shadow>
+                                        <Shadow Brush="#f59e0b" Offset="0,6" Radius="20" Opacity="0.4"/>
+                                    </Frame.Shadow>
+                                    <Button TextColor="White"
+                                            BackgroundColor="Transparent"
+                                            FontSize="18"
+                                            FontAttributes="Bold"
+                                            HeightRequest="60"
+                                            Clicked="AgregarAlCarrito_Clicked">
+                                        <Button.Text>
+                                            <OnPlatform x:TypeArguments="x:String">
+                                                <On Platform="iOS, Android">🛒 Agregar al carrito</On>
+                                                <On Platform="WinUI">🛒 Agregar al carrito</On>
+                                            </OnPlatform>
+                                        </Button.Text>
+                                    </Button>
+                                </Frame>
                             </VerticalStackLayout>
                         </Frame>
-
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
