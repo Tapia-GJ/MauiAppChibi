@@ -1,19 +1,25 @@
 using MauiMySql.Clases;
 using MauiMySql.Models;
 using System.Collections.ObjectModel;
+using System.Text;
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
 
 namespace MauiMySql.Views;
 
 public partial class CarritoView : ContentPage
 {
-    private ObservableCollection<ProductoCarrito> productos = new();
+    public ObservableCollection<ProductoCarrito> productos { get; set; } = new();
     private readonly Consultas consultas = new();
 
     public CarritoView()
     {
         InitializeComponent();
         BindingContext = this;
-        CarritoCollectionView.ItemsSource = productos;
     }
 
     protected override async void OnAppearing()
@@ -25,7 +31,16 @@ public partial class CarritoView : ContentPage
             bool recargar = Preferences.Get("recargar_carrito", false);
             IsBusy = true;
 
-            if (productos.Count == 0 || recargar) // Solo carga si no se han cargado ya
+            // Asegurar que siempre exista carrito
+            long carritoId = Preferences.Get("carrito_id", 0L);
+            if (carritoId == 0)
+            {
+                var userId = consultas.ObtenerUsuarioActualId();
+                carritoId = await consultas.ObtenerOCrearCarritoPorUsuarioAsync(userId);
+                Preferences.Set("carrito_id", carritoId);
+            }
+
+            if (productos.Count == 0 || recargar)
             {
                 await consultas.InitializeAsync();
                 await CargarProductosEnCarrito();
@@ -57,22 +72,42 @@ public partial class CarritoView : ContentPage
 
             productos.Add(p);
         }
+        OnPropertyChanged(nameof(Total));
     }
 
-    private void SumarCantidad_Clicked(object sender, EventArgs e)
+    private async void SumarCantidad_Clicked(object sender, EventArgs e)
     {
-        if ((sender as Button)?.BindingContext is ProductoCarrito pc)
+        if (sender is Button button && button.BindingContext is ProductoCarrito pc)
         {
             pc.Cantidad++;
+            await consultas.ActualizarCantidadItemCarritoAsync(pc.id, pc.Cantidad);
+
+            // Actualizar el Label
+            if (button.Parent is StackLayout parent)
+            {
+                var label = parent.Children.OfType<Label>().FirstOrDefault();
+                if (label != null)
+                    label.Text = pc.Cantidad.ToString();
+            }
+
             OnPropertyChanged(nameof(Total));
         }
     }
 
-    private void RestarCantidad_Clicked(object sender, EventArgs e)
+    private async void RestarCantidad_Clicked(object sender, EventArgs e)
     {
-        if ((sender as Button)?.BindingContext is ProductoCarrito pc && pc.Cantidad > 1)
+        if (sender is Button button && button.BindingContext is ProductoCarrito pc && pc.Cantidad > 1)
         {
             pc.Cantidad--;
+            await consultas.ActualizarCantidadItemCarritoAsync(pc.id, pc.Cantidad);
+
+            if (button.Parent is StackLayout parent)
+            {
+                var label = parent.Children.OfType<Label>().FirstOrDefault();
+                if (label != null)
+                    label.Text = pc.Cantidad.ToString();
+            }
+
             OnPropertyChanged(nameof(Total));
         }
     }
@@ -93,9 +128,28 @@ public partial class CarritoView : ContentPage
 
     private async void Pagar_Clicked(object sender, EventArgs e)
     {
-        double total = productos.Sum(p => p.PrecioTotal);
-        await DisplayAlert("Pago", $"Total a pagar: ${total:F2}", "OK");
+        var servicioMP = new MauiMySql.Services.MercadoPagoService();
+
+        // Usa la propiedad Total que ya actualizas cuando cambia la cantidad
+        decimal montoTotal = this.Total;  // <-- Aquí usas tu propiedad ya calculada
+
+        string descripcion = "Pago de carrito";
+
+        string? urlPago = await servicioMP.CrearPreferencia(montoTotal, descripcion);
+
+        if (!string.IsNullOrEmpty(urlPago))
+        {
+            await Browser.OpenAsync(urlPago, BrowserLaunchMode.SystemPreferred);
+        }
+        else
+        {
+            await DisplayAlert("Error", "No se pudo crear la preferencia de pago", "OK");
+        }
     }
 
-    public double Total => productos.Sum(p => p.PrecioTotal);
+
+
+    public decimal Total => productos.Sum(p => (decimal)p.PrecioTotal);
+
+    //public double Total => productos.Sum(p => p.PrecioTotal);
 }

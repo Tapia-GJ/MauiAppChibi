@@ -35,10 +35,7 @@ namespace MauiMySql.Clases
 
         public async Task<List<Producto>> GetAllAsync()
         {
-            var response = await _client
-                .From<Producto>()
-                .Get();
-
+            var response = await _client.From<Producto>().Get();
             return response.Models;
         }
 
@@ -48,7 +45,6 @@ namespace MauiMySql.Clases
                 .From<Producto>()
                 .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, id)
                 .Get();
-
             return response.Models.FirstOrDefault();
         }
 
@@ -83,30 +79,28 @@ namespace MauiMySql.Clases
             var producto = new Producto { Id = id };
             await _client.From<Producto>().Delete(producto);
         }
-        public Supabase.Client GetClient()
-        {
-            return _client;
-        }
+
+        public Supabase.Client GetClient() => _client;
+
         public async Task<bool> IniciarSesionAsync(string email, string password)
         {
             await _client.InitializeAsync();
-
             var session = await _client.Auth.SignIn(email, password);
-
             return session.User != null;
         }
+
         public async Task<bool> RegistrarseAsync(string email, string password)
         {
             await _client.InitializeAsync();
-
             var session = await _client.Auth.SignUp(email, password);
-
             return session.User != null;
         }
+
         public string ObtenerUsuarioActualId()
         {
             return _client.Auth.CurrentUser?.Id;
         }
+
         public async Task<long> ObtenerOCrearCarritoPorUsuarioAsync(string userId)
         {
             await _client.InitializeAsync();
@@ -116,11 +110,9 @@ namespace MauiMySql.Clases
                 .Filter("cliente_id", Supabase.Postgrest.Constants.Operator.Equals, userId)
                 .Get();
 
-            // Si ya existe un carrito, devolver su ID
             if (resultado.Models.Count > 0)
                 return resultado.Models[0].Id;
 
-            // Si no existe, crearlo
             var nuevoCarrito = new Carrito
             {
                 UserId = userId,
@@ -130,6 +122,7 @@ namespace MauiMySql.Clases
             var insercion = await _client.From<Carrito>().Insert(nuevoCarrito);
             return insercion.Models[0].Id;
         }
+
         public async Task<List<ProductoCarrito>> ObtenerProductosDeCarritoAsync(long carritoId)
         {
             var items = await _client
@@ -155,18 +148,34 @@ namespace MauiMySql.Clases
 
             return lista;
         }
+
         public async Task AgregarItemCarritoAsync(ItemCarrito item)
         {
+            if (item.CarritoId == 0)
+                throw new Exception("El item no tiene carrito válido");
             await _client.From<ItemCarrito>().Insert(item);
         }
+
         public async Task EliminarProductoDeCarritoAsync(int id)
         {
             var itemProducto = new ItemCarrito { Id = id };
             await _client.From<ItemCarrito>().Delete(itemProducto);
         }
 
+        public async Task ActualizarCantidadItemCarritoAsync(int? itemId, int nuevaCantidad)
+        {
+            if (!itemId.HasValue) return;
 
+            // Traer el registro actual para no perder el carrito_id
+            var actual = await _client
+                .From<ItemCarrito>()
+                .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, itemId.Value)
+                .Single();
 
+            if (actual == null) return;
 
+            actual.Cantidad = nuevaCantidad;
+            await _client.From<ItemCarrito>().Update(actual);
+        }
     }
 }
