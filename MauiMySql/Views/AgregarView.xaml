@@ -42,7 +42,7 @@
                     <!-- Botón carrito con gradiente -->
                     <Frame CornerRadius="20" 
                            HasShadow="True"
-                           Padding="15"
+                           Padding="10"
                            Grid.Column="1"
                            Margin="20,0,0,0"
                            VerticalOptions="Center">
@@ -53,9 +53,9 @@
                             </LinearGradientBrush>
                         </Frame.Background>
                         <Frame.Shadow>
-                            <Shadow Brush="#6366f1" Offset="0,4" Radius="15" Opacity="0.4"/>
+                            <Shadow Brush="#6366f1" Offset="0,4" Radius="10" Opacity="0.4"/>
                         </Frame.Shadow>
-                        <Image Source="cart_icon.png"
+                        <Image Source="icon_cart.png"
                                WidthRequest="28"
                                HeightRequest="28"
                                VerticalOptions="Center"/>
@@ -79,13 +79,9 @@
                            Margin="0,0,10,0"/>
                     <Label Text="Inspirado en lo último que viste"
                            FontAttributes="Bold"
-                           FontSize="22"
+                           FontSize="16"
                            TextColor="#1e293b"
                            VerticalOptions="Center"/>
-                    <Label Text="✨"
-                           FontSize="24"
-                           VerticalOptions="Center"
-                           Margin="10,0,0,0"/>
                 </StackLayout>
             </Frame>
 

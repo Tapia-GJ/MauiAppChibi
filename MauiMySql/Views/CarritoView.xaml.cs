@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
 using System.Text;
 using System.Text;
 using System.Text.Json;
@@ -138,24 +140,53 @@ public partial class CarritoView : ContentPage, INotifyPropertyChanged
 
     private async void Pagar_Clicked(object sender, EventArgs e)
     {
-        var servicioMP = new MauiMySql.Services.MercadoPagoService();
-
-        // Usa la propiedad Total que ya actualizas cuando cambia la cantidad
-        decimal montoTotal = this.Total;  // <-- Aquí usas tu propiedad ya calculada
-
-        string descripcion = "Pago de carrito";
-
-        string? urlPago = await servicioMP.CrearPreferencia(montoTotal, descripcion);
-
-        if (!string.IsNullOrEmpty(urlPago))
+        try
         {
-            await Browser.OpenAsync(urlPago, BrowserLaunchMode.SystemPreferred);
+            var availability = await CrossFingerprint.Current.GetAvailabilityAsync();
+            if (availability != FingerprintAvailability.Available)
+            {
+                await DisplayAlert("Autenticación biométrica no disponible",
+                                   $"Motivo: {availability}",
+                                   "OK");
+                return;
+            }
+
+            var config = new AuthenticationRequestConfiguration("Confirmación de pago", "Autenticación requerida para continuar")
+            {
+                CancelTitle = "Cancelar",
+                FallbackTitle = "Usar PIN"
+            };
+
+            var result = await CrossFingerprint.Current.AuthenticateAsync(config);
+
+            if (!result.Authenticated)
+            {
+                await DisplayAlert("Autenticación fallida", "No se reconoció la huella. No eres el propietario.", "OK");
+                return;
+            }
+
+            //  Si la huella fue válida, continúa con el flujo actual de pago
+            var servicioMP = new MauiMySql.Services.MercadoPagoService();
+            decimal montoTotal = this.Total;
+            string descripcion = "Pago de carrito";
+
+            string? urlPago = await servicioMP.CrearPreferencia(montoTotal, descripcion);
+
+            if (!string.IsNullOrEmpty(urlPago))
+            {
+                await Browser.OpenAsync(urlPago, BrowserLaunchMode.SystemPreferred);
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo crear la preferencia de pago", "OK");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "No se pudo crear la preferencia de pago", "OK");
+            await DisplayAlert("Error inesperado", ex.Message, "OK");
         }
     }
+
 
     public decimal Total => productos.Sum(p => (decimal)p.PrecioTotal);
 

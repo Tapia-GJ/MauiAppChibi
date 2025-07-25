@@ -13,24 +13,24 @@
                    CornerRadius="25" 
                    HasShadow="True"
                    Padding="30,25"
-                   Margin="0,10,0,15">
+                   Margin="0,5,0,15">
                 <Frame.Shadow>
-                    <Shadow Brush="#e2e8f0" Offset="0,8" Radius="25" Opacity="0.2"/>
+                    <Shadow Brush="#e2e8f0" Offset="0,8" Radius="20" Opacity="0.2"/>
                 </Frame.Shadow>
                 <StackLayout Orientation="Horizontal" 
                              HorizontalOptions="Center"
-                             Spacing="15">
+                             Spacing="10">
                     <Frame BackgroundColor="#f1f5f9" 
                            CornerRadius="20" 
                            HasShadow="False"
-                           Padding="15"
+                           Padding="10"
                            VerticalOptions="Center">
                         <Label Text="🛒"
-                               FontSize="28"
+                               FontSize="16"
                                VerticalOptions="Center"/>
                     </Frame>
                     <Label Text="Carrito de Compras"
-                           FontSize="32"
+                           FontSize="24"
                            FontAttributes="Bold"
                            TextColor="#0f172a"
                            VerticalOptions="Center" />
@@ -43,146 +43,131 @@
                             SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="0" 
-                               Margin="0,15" 
-                               BackgroundColor="White" 
-                               CornerRadius="25"
-                               HasShadow="True">
+                        <Frame Padding="20" Margin="0,15"
+           BackgroundColor="White"
+           CornerRadius="25"
+           HasShadow="True">
                             <Frame.Shadow>
                                 <Shadow Brush="#cbd5e1" Offset="0,8" Radius="25" Opacity="0.15"/>
                             </Frame.Shadow>
 
-                            <Grid ColumnDefinitions="120,*,Auto"
-                                  RowDefinitions="Auto,Auto"
-                                  ColumnSpacing="20" 
-                                  RowSpacing="15"
-                                  Padding="25">
+                            <VerticalStackLayout Spacing="15">
 
-                                <!-- Imagen del producto -->
-                                <Frame Grid.RowSpan="2"
-                                       CornerRadius="20"
-                                       HasShadow="True"
-                                       Padding="0"
-                                       BorderColor="#f1f5f9">
-                                    <Frame.Shadow>
-                                        <Shadow Brush="#64748b" Offset="0,4" Radius="12" Opacity="0.1"/>
-                                    </Frame.Shadow>
-                                    <Image Source="{Binding Producto.ImagenPath}"
-                                           HeightRequest="100" 
-                                           WidthRequest="100"
-                                           Aspect="AspectFill"
-                                           VerticalOptions="Center" 
-                                           HorizontalOptions="Center" />
-                                </Frame>
+                                <!-- Nombre y Descripción -->
+                                <StackLayout Spacing="4">
+                                    <Label Text="{Binding Producto.Nombre}"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       TextColor="#0f172a"
+                       LineBreakMode="TailTruncation" />
 
-                                <!-- Nombre del producto -->
-                                <Label Grid.Column="1" 
-                                       Text="{Binding Producto.Nombre}"
-                                       FontAttributes="Bold" 
-                                       FontSize="18"
-                                       TextColor="#0f172a"
-                                       VerticalOptions="Center"
-                                       LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Producto.Descripcion}"
+                       FontSize="14"
+                       TextColor="#64748b"
+                       LineBreakMode="TailTruncation" />
+                                </StackLayout>
 
-                                <!-- Contenedor para los precios -->
-                                <VerticalStackLayout Grid.Column="2" 
-                                                     Spacing="5"
-                                                     HorizontalOptions="End" 
-                                                     VerticalOptions="Center">
-
-                                    <!-- Precio unitario -->
-                                    <Frame BackgroundColor="#f1f5f9" 
-                                           CornerRadius="10" 
-                                           HasShadow="False"
-                                           Padding="8,4"
-                                           IsVisible="{Binding MostrarPrecioUnitario}">
-                                        <Label Text="{Binding Producto.Precio, StringFormat='${0:F2}'}"
-                                               FontSize="12" 
-                                               TextColor="#64748b" 
-                                               HorizontalTextAlignment="Center" />
+                                <!-- Imagen + Precio -->
+                                <HorizontalStackLayout Spacing="20"
+                                   HorizontalOptions="CenterAndExpand"
+                                   VerticalOptions="Center">
+                                    <!-- Imagen del producto -->
+                                    <Frame CornerRadius="10"
+                       HasShadow="True"
+                       Padding="0"
+                       WidthRequest="100"
+                       HeightRequest="100"
+                       BorderColor="#f1f5f9">
+                                        <Frame.Shadow>
+                                            <Shadow Brush="#64748b" Offset="0,4" Radius="8" Opacity="0.1"/>
+                                        </Frame.Shadow>
+                                        <Image Source="{Binding Producto.ImagenPath}"
+                           Aspect="AspectFill" />
                                     </Frame>
 
-                                    <!-- Precio total -->
-                                    <Frame CornerRadius="12" 
-                                           HasShadow="False"
-                                           Padding="12,6">
-                                        <Frame.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                <GradientStop Color="#10b981" Offset="0"/>
-                                                <GradientStop Color="#059669" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </Frame.Background>
-                                        <Label Text="{Binding PrecioTotal, StringFormat='${0:F2}'}"
-                                               FontSize="16" 
-                                               TextColor="White" 
-                                               HorizontalTextAlignment="Center"
-                                               FontAttributes="Bold" />
-                                    </Frame>
-                                </VerticalStackLayout>
+                                    <!-- Precio -->
+                                    <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <!-- Precio unitario -->
+                                        <Frame BackgroundColor="#f1f5f9"
+                           CornerRadius="10"
+                           HasShadow="False"
+                           Padding="8,4"
+                           IsVisible="{Binding MostrarPrecioUnitario}">
+                                            <Label Text="{Binding Producto.Precio, StringFormat='${0:F2}'}"
+                               FontSize="12"
+                               TextColor="#64748b"
+                               HorizontalTextAlignment="Center" />
+                                        </Frame>
+
+                                        <!-- Precio total -->
+                                        <Frame CornerRadius="12"
+                           HasShadow="False"
+                           Padding="12,6">
+                                            <Frame.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                    <GradientStop Color="#10b981" Offset="0"/>
+                                                    <GradientStop Color="#059669" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Frame.Background>
+                                            <Label Text="{Binding PrecioTotal, StringFormat='${0:F2}'}"
+                               FontSize="16"
+                               TextColor="White"
+                               HorizontalTextAlignment="Center"
+                               FontAttributes="Bold" />
+                                        </Frame>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
 
                                 <!-- Controles de cantidad -->
-                                <Frame Grid.Row="1" 
-                                       Grid.Column="1" 
-                                       BackgroundColor="#f8fafc" 
-                                       CornerRadius="20" 
-                                       HasShadow="False"
-                                       Padding="15,10"
-                                       HorizontalOptions="Start">
-                                    <StackLayout Orientation="Horizontal" 
-                                                 Spacing="15"
-                                                 VerticalOptions="Center">
-                                        <Frame BackgroundColor="#e2e8f0" 
-                                               CornerRadius="18" 
-                                               HasShadow="False"
-                                               Padding="0">
-                                            <Button Text="−" 
-                                                    WidthRequest="36" 
-                                                    HeightRequest="36"
-                                                    BackgroundColor="Transparent" 
-                                                    TextColor="#475569" 
-                                                    FontSize="20"
-                                                    FontAttributes="Bold"
-                                                    Clicked="RestarCantidad_Clicked" />
-                                        </Frame>
+                                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                                    <Frame BackgroundColor="#e2e8f0"
+                       CornerRadius="18"
+                       HasShadow="False"
+                       Padding="0">
+                                        <Button Text="−"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            BackgroundColor="Transparent"
+                            TextColor="#475569"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            Clicked="RestarCantidad_Clicked" />
+                                    </Frame>
 
-                                        <Frame BackgroundColor="White" 
-                                               CornerRadius="12" 
-                                               HasShadow="False"
-                                               Padding="15,8"
-                                               BorderColor="#e2e8f0">
-                                            <Label Text="{Binding Cantidad}" 
-                                                   VerticalOptions="Center" 
-                                                   FontSize="18" 
-                                                   FontAttributes="Bold"
-                                                   TextColor="#0f172a"
-                                                   MinimumWidthRequest="25"
-                                                   HorizontalTextAlignment="Center" />
-                                        </Frame>
+                                    <Frame BackgroundColor="White"
+                       CornerRadius="12"
+                       HasShadow="False"
+                       Padding="15,8"
+                       BorderColor="#e2e8f0">
+                                        <Label Text="{Binding Cantidad}"
+                           VerticalOptions="Center"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#0f172a"
+                           MinimumWidthRequest="25"
+                           HorizontalTextAlignment="Center" />
+                                    </Frame>
 
-                                        <Frame BackgroundColor="#e2e8f0" 
-                                               CornerRadius="18" 
-                                               HasShadow="False"
-                                               Padding="0">
-                                            <Button Text="+" 
-                                                    WidthRequest="36" 
-                                                    HeightRequest="36"
-                                                    BackgroundColor="Transparent" 
-                                                    TextColor="#475569" 
-                                                    FontSize="18"
-                                                    FontAttributes="Bold"
-                                                    Clicked="SumarCantidad_Clicked" />
-                                        </Frame>
-                                    </StackLayout>
-                                </Frame>
+                                    <Frame BackgroundColor="#e2e8f0"
+                       CornerRadius="18"
+                       HasShadow="False"
+                       Padding="0">
+                                        <Button Text="+"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            BackgroundColor="Transparent"
+                            TextColor="#475569"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            Clicked="SumarCantidad_Clicked" />
+                                    </Frame>
+                                </HorizontalStackLayout>
 
                                 <!-- Botón eliminar -->
-                                <Frame Grid.Row="1" 
-                                       Grid.Column="2" 
-                                       CornerRadius="15" 
-                                       HasShadow="True"
-                                       Padding="0"
-                                       HorizontalOptions="End" 
-                                       VerticalOptions="Center">
+                                <Frame CornerRadius="15"
+                   HasShadow="True"
+                   Padding="0"
+                   HorizontalOptions="Center">
                                     <Frame.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                             <GradientStop Color="#ef4444" Offset="0"/>
@@ -193,16 +178,17 @@
                                         <Shadow Brush="#ef4444" Offset="0,4" Radius="12" Opacity="0.3"/>
                                     </Frame.Shadow>
                                     <Button Text="🗑️ Eliminar"
-                                            BackgroundColor="Transparent" 
-                                            TextColor="White" 
-                                            HeightRequest="45" 
-                                            FontSize="14"
-                                            FontAttributes="Bold"
-                                            Clicked="Eliminar_Clicked" />
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        HeightRequest="45"
+                        FontSize="14"
+                        FontAttributes="Bold"
+                        Clicked="Eliminar_Clicked" />
                                 </Frame>
-                            </Grid>
+                            </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
+
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
