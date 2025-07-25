@@ -1,4 +1,5 @@
-﻿using MauiMySql.DTO;
+﻿using Java.Util.Logging;
+using MauiMySql.DTO;
 using MauiMySql.Models;
 using Supabase;
 using System.Collections.Generic;
@@ -82,19 +83,120 @@ namespace MauiMySql.Clases
 
         public Supabase.Client GetClient() => _client;
 
-        public async Task<bool> IniciarSesionAsync(string email, string password)
+        //public async Task<bool> IniciarSesionAsync(string email, string password)
+        //{
+        //    await _client.InitializeAsync();
+        //    var session = await _client.Auth.SignIn(email, password);
+        //    return session.User != null;
+        //}
+
+        public async Task<(bool Exito, string Mensaje)> IniciarSesionAsync(string email, string password)
         {
-            await _client.InitializeAsync();
-            var session = await _client.Auth.SignIn(email, password);
-            return session.User != null;
+            try
+            {
+                await _client.InitializeAsync();
+
+                var response = await _client.Auth.SignIn(email, password);
+
+                var user = _client.Auth.CurrentUser;
+                var session = _client.Auth.CurrentSession;
+
+                if (user == null || session == null)
+                {
+                    return (false, "Correo o contraseña incorrectos o correo no verificado.");
+                }
+
+                // Verificar si el correo ya fue confirmado
+                if (user.ConfirmedAt == null)
+                {
+                    return (false, "Debes verificar tu correo antes de iniciar sesión.");
+                }
+
+                return (true, "Inicio de sesión exitoso.");
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    // Intenta parsear como JSON
+                    var json = System.Text.Json.JsonDocument.Parse(ex.Message);
+                    if (json.RootElement.TryGetProperty("msg", out var msg))
+                    {
+                        return (false, msg.GetString());
+                    }
+                }
+                catch
+                {
+                    // Ignora si no es JSON
+                }
+
+                return (false, $"Error inesperado: {ex.Message}");
+            }
         }
 
-        public async Task<bool> RegistrarseAsync(string email, string password)
+
+
+
+
+
+        //public async Task<bool> RegistrarseAsync(string email, string password)
+        //{
+        //    await _client.InitializeAsync();
+        //    var session = await _client.Auth.SignUp(email, password);
+        //    return session.User != null;
+        //}
+
+        public async Task<(bool Exito, string Mensaje)> RegistrarseAsync(string email, string password)
         {
-            await _client.InitializeAsync();
-            var session = await _client.Auth.SignUp(email, password);
-            return session.User != null;
+            try
+            {
+                await _client.InitializeAsync();
+                // Intenta registrar al usuario
+                var session = await _client.Auth.SignUp(email, password);
+
+                var user = _client.Auth.CurrentUser;
+                var currentSession = _client.Auth.CurrentSession;
+
+                // Si user no es null pero no hay sesión => necesita confirmar correo
+                if (user != null && currentSession == null)
+                {
+                    return (true, "Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
+                }
+
+                // Si ya está logueado automáticamente (confirm email deshabilitado)
+                if (user != null && currentSession != null)
+                {
+                    return (true, "Registro exitoso.");
+                }
+
+                // En caso de que no haya user
+                return (false, "No se pudo completar el registro. Intenta nuevamente.");
+            }
+            catch (Exception ex)
+            {
+                // Detecta si el error indica que ya está registrado
+                if (ex.Message.Contains("User already registered", StringComparison.OrdinalIgnoreCase))
+                    return (false, "Este correo ya está registrado.");
+                if (ex.Message.Contains("over_email_send_rate_limit", StringComparison.OrdinalIgnoreCase))
+                    return (false, "No ha confirmado su correo electronico");
+                try
+                {
+                    // Intenta parsear como JSON
+                    var json = System.Text.Json.JsonDocument.Parse(ex.Message);
+                    if (json.RootElement.TryGetProperty("msg", out var msg))
+                    {
+                        return (false, msg.GetString());
+                    }
+                }
+                catch
+                {
+                    // Ignora si no es JSON
+                }
+
+                return (false, $"Error inesperado: {ex.Message}");
+            }
         }
+
 
         public string ObtenerUsuarioActualId()
         {

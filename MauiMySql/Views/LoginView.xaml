@@ -7,7 +7,27 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="40" Spacing="30" VerticalOptions="Center" MinimumHeightRequest="800">
-
+            <!-- Mensaje de error elegante -->
+            <Frame BackgroundColor="#fef2f2" 
+       CornerRadius="15" 
+       HasShadow="False"
+       Padding="20"
+       BorderColor="#fecaca"
+       x:Name="ErrorFrame"
+       IsVisible="False">
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="⚠️"
+               FontSize="20"
+               VerticalOptions="Center"/>
+                    <Label x:Name="MensajeError"
+               TextColor="#dc2626"
+               FontSize="16"
+               FontAttributes="None"
+               VerticalOptions="Center"
+               HorizontalOptions="FillAndExpand"
+               LineBreakMode="WordWrap"/>
+                </StackLayout>
+            </Frame>
             <!-- Formulario de login -->
             <Frame BackgroundColor="White" 
                    CornerRadius="25" 
@@ -136,27 +156,7 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Mensaje de error elegante -->
-            <Frame BackgroundColor="#fef2f2" 
-                   CornerRadius="15" 
-                   HasShadow="False"
-                   Padding="20"
-                   BorderColor="#fecaca"
-                   x:Name="ErrorFrame"
-                   IsVisible="False">
-                <StackLayout Orientation="Horizontal" Spacing="10">
-                    <Label Text="⚠️"
-                           FontSize="20"
-                           VerticalOptions="Center"/>
-                    <Label x:Name="MensajeError"
-                           TextColor="#dc2626"
-                           FontSize="16"
-                           FontAttributes="None"
-                           VerticalOptions="Center"
-                           HorizontalOptions="FillAndExpand"
-                           LineBreakMode="WordWrap"/>
-                </StackLayout>
-            </Frame>
+            
 
             <!-- Footer minimalista -->
             <Label Text="Hecho con ❤️ para foodies"

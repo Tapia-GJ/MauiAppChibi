@@ -14,7 +14,7 @@ public partial class LoginView : ContentPage
 
     private async void IniciarSesion_Clicked(object sender, EventArgs e)
     {
-        MensajeError.IsVisible = false;
+        ErrorFrame.IsVisible = false;
 
         var email = EmailEntry.Text?.Trim();
         var password = PasswordEntry.Text;
@@ -24,8 +24,14 @@ public partial class LoginView : ContentPage
             MostrarError("Ingresa tu correo y contraseña.");
             return;
         }
+        if (!EsCorreoValido(email))
+        {
+            MostrarError("El correo ingresado no tiene un formato válido.");
+            return;
+        }
 
-        var exito = await _consultas.IniciarSesionAsync(email, password);
+        // NUEVO: recibe tupla con mensaje y estado
+        var (exito, mensaje) = await _consultas.IniciarSesionAsync(email, password);
 
         if (exito)
         {
@@ -36,18 +42,18 @@ public partial class LoginView : ContentPage
             Preferences.Set("carrito_id", carritoId);
             Preferences.Set("user_id", userId);
 
-            await DisplayAlert("Éxito", $"Bienvenido {email}", "OK");
+            await DisplayAlert("Éxito", mensaje, "OK");
             await Shell.Current.GoToAsync("//home");
         }
         else
         {
-            MostrarError("Correo o contraseña incorrectos.");
+            MostrarError(mensaje); // Muestra el mensaje específico
         }
     }
 
     private async void Registrarse_Clicked(object sender, EventArgs e)
     {
-        MensajeError.IsVisible = false;
+        ErrorFrame.IsVisible = false;
 
         var email = EmailEntry.Text?.Trim();
         var password = PasswordEntry.Text;
@@ -57,22 +63,37 @@ public partial class LoginView : ContentPage
             MostrarError("Correo y contraseña requeridos.");
             return;
         }
+        if (!EsCorreoValido(email))
+        {
+            MostrarError("El correo ingresado no tiene un formato válido.");
+            return;
+        }
 
-        var exito = await _consultas.RegistrarseAsync(email, password);
+        // NUEVO: también devuelve mensaje personalizado
+        var (exito, mensaje) = await _consultas.RegistrarseAsync(email, password);
 
         if (exito)
         {
-            await DisplayAlert("Registro exitoso", "Ahora puedes iniciar sesión", "OK");
+            await DisplayAlert("Registro exitoso", mensaje, "OK");
         }
         else
         {
-            MostrarError("No se pudo registrar. Verifica el correo.");
+            MostrarError(mensaje); // Muestra mensaje real (ej. ya registrado)
         }
     }
 
     private void MostrarError(string mensaje)
     {
         MensajeError.Text = mensaje;
-        MensajeError.IsVisible = true;
+        ErrorFrame.IsVisible = true;
+    }
+
+    private bool EsCorreoValido(string correo)
+    {
+        return !string.IsNullOrWhiteSpace(correo) &&
+               System.Text.RegularExpressions.Regex.IsMatch(
+                   correo,
+                   @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                   System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     }
 }
