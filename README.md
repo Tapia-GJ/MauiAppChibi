@@ -40,6 +40,8 @@ Aplicación móvil desarrollada con .NET MAUI y Supabase como backend para auten
 - **Inicio de sesión**: Verifica si el correo está confirmado antes de permitir el acceso.
 - **Persistencia**: Se guarda el ID de usuario y carrito en preferencias locales con `Preferences`.
 
+<img src="MauiMySql/Resources/Login.jpeg" alt="Login" width="300" /><img src="MauiMySql/Resources/Home.jpeg" alt="Home" width="300" /><img src="MauiMySql/Resources/Carrito.jpeg" alt="Carrito" width="300" />
+
 ## 🛒 Carrito de compras
 
 Cada usuario tiene un carrito único:
